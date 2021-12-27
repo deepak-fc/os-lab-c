@@ -1,0 +1,5 @@
+todo
+    - Add function that counts total number of processes in GanttChart including IDLE.
+    - Work on Drawing Gantt Chart Lines
+    - Work on Round Robin
+    - Work on the decimal SRTF example from textbook
