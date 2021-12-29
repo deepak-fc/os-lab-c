@@ -48,6 +48,7 @@ void displayProcess(Process * p)
 void displayProcesses(Process listProcess[], int len)
 {
     int i=0;
+    printf("\n\nMASTER TABLE\n");
     drawLine(81);
     printf("PID\t|Priority\t|B.T\t|A.T\t|TAT\t|W.T\t|S.T\t|C.T\t|R.T\t|\n");
     drawLine(81);
@@ -80,108 +81,47 @@ void processGetUserInput(Process * p)
     drawLine(80);
 }
 
-void sortByArrivalTime(Process * listProcess, int n)
+void sortProcessListBy(Process* listProcess, int n, SortAttribute attribute, bool reverse)
 {
-    int i = 0;
-    int j = 0;
     bool sorted;
-    for(i=0; i<n-1; i++)
+    bool swapFlag = false;
+    for (int i = 0; i < n - 1; i++)
     {
         sorted = true;
-        for(j=0; j<n-1; j++)
+        for (int j = 0; j < n - 1; j++)
         {
-            if(listProcess[j].state == FINISHED)
-                continue;
-
-            else if(listProcess[j + 1].arrivalTime < listProcess[j].arrivalTime)           
-            {
-                swapProcess(&listProcess[j+1], &listProcess[j]);
-                sorted = false;
-            }
-        }   
-
-        if(sorted == true)
-            return;
-    }
-}
-
-void sortByBurstTime(Process * listProcess, int n)
-{
-    int i = 0;
-    int j = 0;
-    bool sorted;
-    for(i=0; i<n-1; i++)
-    {
-        sorted = true;
-        for(j=0; j<n-1; j++)
-        {
-            if(listProcess[j].state == FINISHED)
-                continue;
-
-            else if(listProcess[j + 1].remainingBurst < listProcess[j].remainingBurst)           
-            {
-                swapProcess(&listProcess[j+1], &listProcess[j]);
-                sorted = false;
-            }
-        }   
-
-        if(sorted == true)
-            return;
-    }
-}
-
-void sortByPriority(Process* listProcess, int n, bool priorityReverse)
-{
-    int i = 0;
-    int j = 0;
-    bool sorted;
-    for (i = 0; i < n - 1; i++)
-    {
-        sorted = true;
-        for (j = 0; j < n - 1; j++)
-        {
+            swapFlag = false;
             if (listProcess[j].state == FINISHED)
                 continue;
 
-            else if (listProcess[j + 1].priority < listProcess[j].priority && priorityReverse == false)
+            if (reverse == true)
             {
-                swapProcess(&listProcess[j + 1], &listProcess[j]);
-                sorted = false;
+                if ((attribute == ID && listProcess[j + 1].id > listProcess[j].id) ||
+                    (attribute == ARRIVAL && listProcess[j + 1].arrivalTime > listProcess[j].arrivalTime) ||
+                    (attribute == BURST && listProcess[j + 1].remainingBurst > listProcess[j].remainingBurst) ||
+                    (attribute == PRIORITY && listProcess[j + 1].priority > listProcess[j].priority))
+                {
+                    swapFlag = true;
+                }
             }
-            else if (listProcess[j + 1].priority > listProcess[j].priority && priorityReverse == true)
+            else
+            {
+                if ((attribute == ID && listProcess[j + 1].id < listProcess[j].id) ||
+                    (attribute == ARRIVAL && listProcess[j + 1].arrivalTime < listProcess[j].arrivalTime) ||
+                    (attribute == BURST && listProcess[j + 1].remainingBurst < listProcess[j].remainingBurst) ||
+                    (attribute == PRIORITY && listProcess[j + 1].priority < listProcess[j].priority))
+                {
+                    swapFlag = true;
+                }
+            }
+                
+            if (swapFlag)
             {
                 swapProcess(&listProcess[j + 1], &listProcess[j]);
                 sorted = false;
             }
         }
-
         if (sorted == true)
-            return;
-    }
-}
-
-
-void sortById(Process * listProcess, int n)
-{
-    int i = 0;
-    int j = 0;
-    bool sorted;
-    for(i=0; i<n-1; i++)
-    {
-        sorted = true;
-        for(j=0; j<n-1; j++)
-        {
-            if(listProcess[i].state == FINISHED)
-                continue;
-
-            else if(listProcess[j + 1].id < listProcess[j].id)           
-            {
-                swapProcess(&listProcess[j+1], &listProcess[j]);
-                sorted = false;
-            }
-        }   
-
-        if(sorted == true)
             return;
     }
 }
