@@ -9,6 +9,15 @@ typedef enum
     
 }ProcessState;
 
+typedef enum
+{
+    ID,
+    BURST,
+    ARRIVAL,
+    PRIORITY
+
+}SortAttribute;
+
 typedef struct Process
 {
     int id;
@@ -29,15 +38,13 @@ typedef struct Process
 }Process;
 
 void processInit(Process * p);
-void updateValues(Process * p);
 void displayProcess(Process * p);
 void displayProcesses(Process listProcess[], int len);
 void processGetUserInput(Process * p);
 void swapProcess(Process * a, Process * b);
+void updateValues(Process* p);
 
-void sortByArrivalTime(Process * listProcess, int n);
-void sortByBurstTime(Process * listProcess, int n);
-void sortByPriority(Process* listProcess, int n, bool priorityReverse);
-void sortById(Process * listProcess, int n);
+void sortProcessListBy(Process* listProcess, int n, SortAttribute attribute, bool reverse);
+
 float * getAllWaitingTimes(Process * listProcess, int n);
 float * getAllTurnaroundTimes(Process * listProcess, int n);
