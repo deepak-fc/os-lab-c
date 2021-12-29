@@ -4,11 +4,19 @@
 #include "Process.h"
 #include "Utilities.h"
 
-void fcfs(Process * listProcess, int n);
-void sjf(Process * listProcess, int n);
-Process* srtf(Process* listProcess, int n, int* newLength);
-void priorityNonPreemptive(Process* listProcess, int n, bool priorityReversed);
-Process* priorityPreemptive(Process* listProcess, int n, bool priorityReversed, int* newLength);
+typedef enum
+{
+	FCFS,
+	SJF,
+	SRTF,
+	PRIORITY_NON_PREEMPTIVE,
+	PRIORITY_PREEMPTIVE,
+	ROUND_ROBIN
+
+}AlgoName;
+
+void nonPreemptiveScheduler(Process* listProcess, int n, AlgoName algoName, bool reverseSort);
+Process* preemptiveScheduler(Process* listProcess, int n, AlgoName algoName, bool reverseSort, int* newLength);
 
 void executeProcess(Process* p, float currentTime, int maxTimePeriod);
 void displayGantt(Process * listProcess, int n);
