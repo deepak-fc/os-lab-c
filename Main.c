@@ -13,9 +13,11 @@ int main(void)
 {
     int n = 0;
     int option = 0;
+    
     Process* listProcess = NULL;
-    Process* ganttProcessList = NULL;
-    int lenGanttProcessList;
+    Process* ganttList = NULL;
+    int lenGanttList;
+    
     int temp = 0;
     bool priorityReversed = false;
 
@@ -44,30 +46,30 @@ int main(void)
     for (int i = 0; i < n; i++)
         processGetUserInput(&listProcess[i]);
 
-    ganttProcessList = listProcess;
-    lenGanttProcessList = n;
+    ganttList = listProcess;
+    lenGanttList = n;
     switch (option)
     {
         case 1:
-            fcfs(listProcess, n);
+            nonPreemptiveScheduler(listProcess, n, FCFS, false);
             break;
         case 2:
-            sjf(listProcess, n);
+            nonPreemptiveScheduler(listProcess, n, SJF, false);
             break;
         case 3:
-            ganttProcessList = srtf(listProcess, n, &lenGanttProcessList);
+            ganttList = preemptiveScheduler(listProcess, n, SRTF, false, &lenGanttList);
             break;
         case 4:
             printf("Is Priority Reversed? [Enter 1/0]: ");
             scanf("%d", &temp);
             priorityReversed = temp;
-            priorityNonPreemptive(listProcess, n, priorityReversed);
+            nonPreemptiveScheduler(listProcess, n, PRIORITY_NON_PREEMPTIVE, priorityReversed);
             break;
         case 5:
             printf("Is Priority Reversed? [Enter 1/0]: ");
             scanf("%d", &temp);
             priorityReversed = temp;
-            ganttProcessList = priorityPreemptive(listProcess, n, priorityReversed, &lenGanttProcessList);
+            ganttList = preemptiveScheduler(listProcess, n, PRIORITY_PREEMPTIVE, priorityReversed, &lenGanttList);
             break;
         case 6:
             //roundRobin();
@@ -76,17 +78,17 @@ int main(void)
             break;
     }
 
-    displayGantt(ganttProcessList, lenGanttProcessList);
+    displayGantt(ganttList, lenGanttList);
     displayProcesses(listProcess, n);
     printf("\nAverage Turnaround Time => %.2f\n", averageTurnaroundTime(listProcess, n));
     printf("Average Waiting Time => %.2f\n\n", averageWaitingTime(listProcess, n));
 
-    if(ganttProcessList != listProcess)
-        free(ganttProcessList);
+    if(ganttList != listProcess)
+        free(ganttList);
     
     free(listProcess);
     listProcess = NULL;
-    ganttProcessList = NULL;
+    ganttList = NULL;
 
     return 0;
 }
